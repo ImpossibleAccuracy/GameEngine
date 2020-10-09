@@ -150,6 +150,9 @@
     <ClInclude Include="UserIntarface.h" />
     <ClInclude Include="Wrappers.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="C++.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
