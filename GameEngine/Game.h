@@ -6,10 +6,8 @@
 #include <SDL2/SDL.h>
 #include <SDL_ttf/SDL_ttf.h>
 #include <SDL_image/SDL_image.h>
-#include <boost/python.hpp>
 #include <sstream>
 
-using func = boost::python::object;
 using namespace std;
 
 class Game;
@@ -20,6 +18,8 @@ class Mouse;
 class Timer;
 class Color;
 class Rect;
+
+typedef void (*func)(shared_ptr<Game>);
 
 namespace GameExceptions {
 	class BaseGameException {
@@ -77,7 +77,7 @@ public:
 		return this->renderer;
 	}
 
-	boost::shared_ptr<Rect> rect;
+	shared_ptr<Rect> rect;
 	typedef enum {
 		FULLSCREEN = 0x00000001,
 		OPENGL = 0x00000002,
@@ -125,10 +125,10 @@ public:
 	void addComponent(GameComponent* component);
 
 	string status;
-	boost::shared_ptr<Mouse> mouse;
-	boost::shared_ptr<Keyboard> keyboard;
+	shared_ptr<Mouse> mouse;
+	shared_ptr<Keyboard> keyboard;
+	shared_ptr<Window> window;
 
-	boost::shared_ptr<Window> window;
 	bool runing, closed;
 	friend class Keyboard;
 	friend class GameComponent;
@@ -141,12 +141,12 @@ protected:
 
 class GameComponent {
 public:
-	GameComponent(boost::shared_ptr<Game>& game);
+	GameComponent(shared_ptr<Game>& game);
 	virtual void close() = 0;
 
 	virtual void loadObjects() = 0;
 	virtual bool canRender() = 0;
-	virtual void onNotify(boost::shared_ptr<GameComponent> sender, string msg) = 0;
+	virtual void onNotify(shared_ptr<GameComponent> sender, string msg) = 0;
 
 	virtual void draw() = 0;
 	virtual void update() = 0;
@@ -160,7 +160,7 @@ public:
 	int getId();
 
 	string componentName;
-	boost::shared_ptr<Game> game;
+	shared_ptr<Game> game;
 private:
 	int id;
 	static int componentsCount;
@@ -217,7 +217,7 @@ public:
 	Rect();
 	Rect(int x, int y, int w = 0, int h = 0);
 
-	boost::shared_ptr<Rect> copy();
+	shared_ptr<Rect> copy();
 
 	int x, y, w, h;
 };

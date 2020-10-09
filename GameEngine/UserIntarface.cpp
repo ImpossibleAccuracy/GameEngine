@@ -2,7 +2,7 @@
 
 using namespace UserIntarface;
 
-Object::Object(boost::shared_ptr<Game> game) {
+Object::Object(shared_ptr<Game> game) {
 	this->game = game;
 	this->id = this->objectsCount;
 	this->objectsCount++;
@@ -19,7 +19,7 @@ void Object::resize(int w, int h) {
 	this->rect->w = w;
 	this->rect->h = h;
 }
-bool Object::checkColision(boost::shared_ptr<Object> _object) {
+bool Object::checkColision(shared_ptr<Object> _object) {
 	for (int x = this->rect->x; x <= this->rect->x + this->rect->w; x++) {
 		for (int y = this->rect->y; y <= this->rect->y + this->rect->h; y++) {
 			if ((_object->rect->x <= x && (x <= _object->rect->x + _object->rect->w)) &&
@@ -29,7 +29,7 @@ bool Object::checkColision(boost::shared_ptr<Object> _object) {
 	}
 	return false;
 }
-bool Object::checkColision2(boost::shared_ptr<Rect> _rect) {
+bool Object::checkColision2(shared_ptr<Rect> _rect) {
 	for (int x = this->rect->x; x <= this->rect->x + this->rect->w; x++) {
 		for (int y = this->rect->y; y <= this->rect->y + this->rect->h; y++) {
 			if ((_rect->x <= x && (x <= _rect->x + _rect->w)) &&
@@ -42,12 +42,12 @@ bool Object::checkColision2(boost::shared_ptr<Rect> _rect) {
 int Object::objectsCount = 0;
 
 
-Sprite::Sprite(boost::shared_ptr<Game> _game, boost::shared_ptr<Rect> _rect, string _path) : Object(_game) {
+Sprite::Sprite(shared_ptr<Game> _game, shared_ptr<Rect> _rect, string _path) : Object(_game) {
 	this->rect = _rect;
 	this->loadTexture(_path);
 }
-Sprite::Sprite(boost::shared_ptr<Game> _game, string _path) : Object(_game) {
-	this->rect = boost::shared_ptr<Rect>(new Rect);
+Sprite::Sprite(shared_ptr<Game> _game, string _path) : Object(_game) {
+	this->rect = shared_ptr<Rect>(new Rect);
 	this->rect->x = 0;
 	this->rect->y = 0;
 	this->rect->w = 100;
@@ -86,10 +86,10 @@ void Sprite::update() {
 }
 
 
-Text::Text(boost::shared_ptr<Game> _game,
+Text::Text(shared_ptr<Game> _game,
 		string _source,
-		boost::shared_ptr<Color> _color,
-		boost::shared_ptr<Rect> _rect,
+		shared_ptr<Color> _color,
+		shared_ptr<Rect> _rect,
 		string fontName, int fontSize,
 		bool _center) : Object(_game) {
 	this->rect = _rect;
@@ -125,7 +125,7 @@ void Text::setFont(string fontName, int fontSize) {
 	}
 	this->setSource(this->source);
 }
-void Text::setColor(boost::shared_ptr<Color> _color) {
+void Text::setColor(shared_ptr<Color> _color) {
 	this->color = _color;
 	this->setSource(this->source);
 }
@@ -150,12 +150,12 @@ void Text::update() {
 }
 
 
-Button::Button(boost::shared_ptr<Game> _game, func _onpress, boost::shared_ptr<Rect> _rect, string _path) : Sprite(_game, _rect, _path) {
+Button::Button(shared_ptr<Game> _game, func _onpress, shared_ptr<Rect> _rect, string _path) : Sprite(_game, _rect, _path) {
 	this->onpress = _onpress;
 	this->text = nullptr;
 	this->is_pressed = false;
 }
-Button::Button(boost::shared_ptr<Game> _game, func _onpress, string _path) : Sprite(_game, _path) {
+Button::Button(shared_ptr<Game> _game, func _onpress, string _path) : Sprite(_game, _path) {
 	this->onpress = _onpress;
 	this->text = nullptr;
 	this->is_pressed = false;
@@ -190,6 +190,6 @@ void Button::update() {
 	if (this->text)
 		this->text->update();
 }
-void Button::setText(boost::shared_ptr<Text> _text) {
+void Button::setText(shared_ptr<Text> _text) {
 	this->text = _text;
 }

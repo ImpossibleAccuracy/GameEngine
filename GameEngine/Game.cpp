@@ -31,7 +31,6 @@ Game::Game() {
     this->closed = false;
 	this->exception = nullptr;
 	this->components = {};
-	//this->exceptionHandler = boost::python::object([](GameExceptions::BaseGameException&) -> void {});
 
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -48,22 +47,22 @@ Game::~Game() {
 }
 
 void Game::init(string name) {
-    this->window = boost::shared_ptr<Window>(new Window(
+    this->window = shared_ptr<Window>(new Window(
         name,
         Rect(),
         Window::FULLSCREEN | Window::SHOWN | Window::OPENGL));
 
-    this->mouse = boost::shared_ptr<Mouse>(new Mouse);
-    this->keyboard = boost::shared_ptr<Keyboard>(new Keyboard);
+    this->mouse = shared_ptr<Mouse>(new Mouse);
+    this->keyboard = shared_ptr<Keyboard>(new Keyboard);
 }
 void Game::init2(string name, int width, int height) {
-	this->window = boost::shared_ptr<Window>(new Window(
+	this->window = shared_ptr<Window>(new Window(
 		name,
 		Rect(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height),
 		Window::SHOWN | Window::OPENGL));
 
-	this->mouse = boost::shared_ptr<Mouse>(new Mouse);
-	this->keyboard = boost::shared_ptr<Keyboard>(new Keyboard);
+	this->mouse = shared_ptr<Mouse>(new Mouse);
+	this->keyboard = shared_ptr<Keyboard>(new Keyboard);
 }
 void Game::close() {
     if (!this->closed) {
@@ -182,7 +181,7 @@ void Game::notify(GameComponent* sender, string to, string msg) {
 			for (int i = 0; i < this->components.size(); i++) {
 				GameComponent* component = this->components[i];
 				if (sender == nullptr || component->getId() != sender->getId()) {
-					component->onNotify(boost::shared_ptr<GameComponent>(sender), msg);
+					component->onNotify(shared_ptr<GameComponent>(sender), msg);
 				}
 			}
 		}
@@ -190,7 +189,7 @@ void Game::notify(GameComponent* sender, string to, string msg) {
 			for (int i = 0; i < this->components.size(); i++) {
 				GameComponent* component = this->components[i];
 				if (component->componentName == to) {
-					component->onNotify(boost::shared_ptr<GameComponent>(sender), msg);
+					component->onNotify(shared_ptr<GameComponent>(sender), msg);
 				}
 			}
 		}
@@ -203,7 +202,7 @@ void Game::addComponent(GameComponent* component) {
 	this->components.push_back(component);
 }
 
-GameComponent::GameComponent(boost::shared_ptr<Game>& game) {
+GameComponent::GameComponent(shared_ptr<Game>& game) {
     this->game = game;
 	this->id = GameComponent::componentsCount;
 	GameComponent::componentsCount++;
@@ -1125,7 +1124,7 @@ Rect::Rect(int x, int y, int w, int h) {
 	this->h = h;
 }
 
-boost::shared_ptr<Rect> Rect::copy() {
-	return boost::shared_ptr<Rect>(new Rect(this->x, this->y, this->w, this->h));
+shared_ptr<Rect> Rect::copy() {
+	return shared_ptr<Rect>(new Rect(this->x, this->y, this->w, this->h));
 }
 
